@@ -15,6 +15,7 @@
     "@types/aws-lambda": "^8.10.133",
     "@types/node": "*",
     "globstar": "^1.0.0",
+    "serverless-deployment-bucket": "^1.6.0",
     "serverless-plugin-typescript": "^2.1.5",
     "tsx": "^4.7.0",
     "typescript": "^5.3.3"

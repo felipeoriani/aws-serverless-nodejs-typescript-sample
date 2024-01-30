@@ -2,18 +2,27 @@ service: flight-service
 
 frameworkVersion: '3'
 
+custom:
+  stage: ${opt:stage, 'dev'}
+
 provider:
   name: aws
   runtime: nodejs20.x
   region: us-east-1
   memorySize: 256
-  stage: ${opt:stage, 'dev'}
+  stage: ${self:custom.stage}
+  deploymentBucket:
+    name: ${self:service}-deployment-bucket-${self:custom.stage}
+    serverSideEncryption: AES256
 
 plugins:
   - serverless-plugin-typescript
+  - serverless-deployment-bucket
 
 package:
   individually: true
+  patterns:
+    - '!test/**'
 
 functions:
   flight:
