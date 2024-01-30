@@ -2,7 +2,9 @@
   "name": "@felipeoriani/flight-service",
   "version": "1.0.0",
   "type": "module",
-  "scripts": {},
+  "scripts": {
+    "build": "tsc"
+  },
   "author": "felipeoriani",
   "license": "ISC",
   "devDependencies": {
