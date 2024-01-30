@@ -4,7 +4,10 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "test": "globstar -- node --import tsx --test \"tests/**/*.test.ts\""
+    "test": "globstar -- node --import tsx --test \"tests/**/*.test.ts\"",
+    "type-check": "tsc --pretty --noEmit",
+    "deploy": "serverless deploy --verbose",
+    "undeploy": "serverless remove --verbose"
   },
   "author": "felipeoriani",
   "license": "ISC",
