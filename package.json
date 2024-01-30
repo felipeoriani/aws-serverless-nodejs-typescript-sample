@@ -3,14 +3,17 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "test": "globstar -- node --import tsx --test \"tests/**/*.test.ts\""
   },
   "author": "felipeoriani",
   "license": "ISC",
   "devDependencies": {
     "@types/aws-lambda": "^8.10.133",
     "@types/node": "*",
+    "globstar": "^1.0.0",
     "serverless-plugin-typescript": "^2.1.5",
+    "tsx": "^4.7.0",
     "typescript": "^5.3.3"
   }
 }
