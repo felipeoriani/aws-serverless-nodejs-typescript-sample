@@ -1,11 +1,12 @@
 {
-  "name": "flight-service",
+  "name": "@felipeoriani/flight-service",
   "version": "1.0.0",
   "type": "module",
   "scripts": {},
   "author": "felipeoriani",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "*",
     "typescript": "^5.3.3"
   }
 }
