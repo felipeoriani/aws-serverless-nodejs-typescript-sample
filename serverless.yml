@@ -1,0 +1,22 @@
+service: flight-service
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: us-east-1
+  memorySize: 256
+  stage: ${opt:stage, 'dev'}
+
+plugins:
+  - serverless-plugin-typescript
+
+package:
+  individually: true
+
+functions:
+  flight:
+    handler: src/functions/get-flight.handler
+    events:
+      - httpApi: 'GET /flight'
