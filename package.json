@@ -4,16 +4,29 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
+    "lint": "eslint --ext .ts .",
+    "lint:fix": "eslint --fix --ext .ts .",
     "test": "globstar -- node --import tsx --test \"tests/**/*.test.ts\"",
     "type-check": "tsc --pretty --noEmit",
     "deploy": "serverless deploy --verbose",
     "undeploy": "serverless remove --verbose"
   },
+  "keywords": [
+    "node",
+    "nodejs",
+    "javascript",
+    "typescript",
+    "serverless",
+    "api"
+  ],
   "author": "felipeoriani",
   "license": "ISC",
   "devDependencies": {
     "@types/aws-lambda": "^8.10.133",
     "@types/node": "*",
+    "@typescript-eslint/eslint-plugin": "^6.20.0",
+    "@typescript-eslint/parser": "^6.20.0",
+    "eslint": "^8.56.0",
     "globstar": "^1.0.0",
     "serverless-deployment-bucket": "^1.6.0",
     "serverless-plugin-typescript": "^2.1.5",
