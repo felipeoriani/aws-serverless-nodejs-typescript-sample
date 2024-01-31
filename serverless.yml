@@ -4,6 +4,7 @@ frameworkVersion: '3'
 
 custom:
   stage: ${opt:stage, 'dev'}
+  tableName: ${self:service}-table-${self:custom.stage}
 
 provider:
   name: aws
@@ -14,6 +15,22 @@ provider:
   deploymentBucket:
     name: ${self:service}-deployment-bucket-${self:custom.stage}
     serverSideEncryption: AES256
+  apiGateway:
+    shouldStartNameWithService: true
+  environment:
+    TABLE_NAME: ${self:custom.tableName}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - 'Fn::GetAtt': [FlightTable, Arn]
 
 plugins:
   - serverless-plugin-typescript
@@ -25,7 +42,7 @@ package:
     - '!test/**'
 
 functions:
-  flight:
+  get-flight:
     handler: src/functions/get-flight.handler
     events:
       - httpApi: 'GET /flight'
@@ -33,3 +50,6 @@ functions:
     handler: src/functions/create-flight.handler
     events:
       - httpApi: 'POST /flight'
+
+resources:
+  - ${file(resources/database.yml)}
