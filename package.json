@@ -8,8 +8,9 @@
     "lint:fix": "eslint --fix --ext .ts .",
     "test": "globstar -- node --import tsx --test \"tests/**/*.test.ts\"",
     "type-check": "tsc --pretty --noEmit",
+    "package": "serverless package",
     "deploy": "serverless deploy --verbose",
-    "undeploy": "serverless remove --verbose"
+    "destroy": "serverless remove --verbose"
   },
   "keywords": [
     "node",
