@@ -29,3 +29,7 @@ functions:
     handler: src/functions/get-flight.handler
     events:
       - httpApi: 'GET /flight'
+  create-flight:
+    handler: src/functions/create-flight.handler
+    events:
+      - httpApi: 'POST /flight'
