@@ -1,6 +1,8 @@
 import { APIGatewayProxyResult } from 'aws-lambda'
 
-type Model = Record<string, unknown> | Record<string, unknown>[]
+type Model = Record<string, unknown> | Record<string, unknown>[] | undefined
+
+const contentType = { 'Content-Type': 'application/json' }
 
 /**
  * Create an instance of APIGatewayProxyResult.
@@ -11,14 +13,20 @@ type Model = Record<string, unknown> | Record<string, unknown>[]
  */
 export const statusCode = (
   statusCode: number,
-  data: Model,
+  data?: Model,
   headers?: {
     [header: string]: boolean | number | string
   }
 ): APIGatewayProxyResult => {
+  const body = data ? JSON.stringify(data) : ''
+
+  if (body) {
+    headers = { ...(headers ?? {}), ...contentType }
+  }
+
   return {
     statusCode,
-    body: JSON.stringify(data),
+    body,
     headers,
   }
 }
@@ -38,7 +46,7 @@ export const ok = (data: Model): APIGatewayProxyResult => statusCode(200, data)
  * @returns Api Gateway message in a 201 Created format.
  */
 export const created = (data: Model, location?: string): APIGatewayProxyResult =>
-  statusCode(201, data, location ? { location } : undefined)
+  statusCode(201, data, location ? { Location: location } : undefined)
 
 /**
  * 204 No Content success status response code indicates that a request has succeeded, but that the client doesn't need to navigate away from its current page.

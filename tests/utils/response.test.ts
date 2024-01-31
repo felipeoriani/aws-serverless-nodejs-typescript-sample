@@ -5,6 +5,9 @@ import { badRequest, created, ok, unprocessableEntity as unprocessableContent } 
 import { randomUUID } from 'node:crypto'
 
 describe('response must be in the API Gateway format', () => {
+  const contentType = 'Content-Type'
+  const applicationJson = 'application/json'
+
   it('Should prepare the response instance to 200 - Ok', () => {
     // arrange
     const data = { id: randomUUID(), name: 'John Doe' }
@@ -15,6 +18,8 @@ describe('response must be in the API Gateway format', () => {
     // assert
     assert.ok(result, 'The instance of the response is not valid.')
     assert.strictEqual(result.statusCode, 200)
+    assert.ok(result.headers)
+    assert.strictEqual(result.headers[contentType], applicationJson)
     assert.strictEqual(result.body, JSON.stringify(data))
   })
 
@@ -30,7 +35,8 @@ describe('response must be in the API Gateway format', () => {
     assert.ok(result, 'The instance of the response is not valid.')
     assert.strictEqual(result.statusCode, 201)
     assert.ok(result.headers)
-    assert.strictEqual(result.headers.location, location)
+    assert.strictEqual(result.headers.Location, location)
+    assert.strictEqual(result.headers[contentType], applicationJson)
     assert.strictEqual(result.body, JSON.stringify(data))
   })
 
@@ -44,7 +50,8 @@ describe('response must be in the API Gateway format', () => {
     // assert
     assert.ok(result, 'The instance of the response is not valid.')
     assert.strictEqual(result.statusCode, 400)
-    assert.equal(result.headers, undefined)
+    assert.ok(result.headers)
+    assert.strictEqual(result.headers[contentType], applicationJson)
     assert.strictEqual(result.body, JSON.stringify(data))
   })
 
@@ -58,7 +65,8 @@ describe('response must be in the API Gateway format', () => {
     // assert
     assert.ok(result, 'The instance of the response is not valid.')
     assert.strictEqual(result.statusCode, 422)
-    assert.equal(result.headers, undefined)
+    assert.ok(result.headers)
+    assert.strictEqual(result.headers[contentType], applicationJson)
     assert.strictEqual(result.body, JSON.stringify(data))
   })
 })
