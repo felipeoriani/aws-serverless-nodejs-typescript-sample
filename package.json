@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
+    "start": "yarn build && node .build/src/index.js",
     "lint": "eslint --ext .ts .",
     "lint:fix": "eslint --fix --ext .ts .",
     "test": "globstar -- node --import tsx --test \"tests/**/*.test.ts\"",
@@ -33,5 +34,9 @@
     "serverless-plugin-typescript": "^2.1.5",
     "tsx": "^4.7.0",
     "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.504.0",
+    "@aws-sdk/lib-dynamodb": "^3.504.0"
   }
 }

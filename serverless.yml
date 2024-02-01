@@ -4,12 +4,13 @@ frameworkVersion: '3'
 
 custom:
   stage: ${opt:stage, 'dev'}
+  region: us-east-1
   tableName: ${self:service}-table-${self:custom.stage}
 
 provider:
   name: aws
   runtime: nodejs20.x
-  region: us-east-1
+  region: ${self:custom.region}
   memorySize: 256
   stage: ${self:custom.stage}
   deploymentBucket:
@@ -17,8 +18,6 @@ provider:
     serverSideEncryption: AES256
   apiGateway:
     shouldStartNameWithService: true
-  environment:
-    TABLE_NAME: ${self:custom.tableName}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -31,6 +30,8 @@ provider:
         - dynamodb:DeleteItem
       Resource:
         - 'Fn::GetAtt': [FlightTable, Arn]
+  environment:
+    TABLE_NAME: ${self:custom.tableName}
 
 plugins:
   - serverless-plugin-typescript
