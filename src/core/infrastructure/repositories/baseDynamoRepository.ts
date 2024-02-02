@@ -37,15 +37,12 @@ export abstract class BaseDynamoRepository<T extends BaseEntity> implements IBas
    * @param pk Constant for the partition key of the table.
    * @param skPrefix Prefix for the sort key of the table.
    */
-  constructor(protected readonly ddb: DynamoDBDocumentClient, pk: string, skPrefix: string) {
+  constructor(protected readonly ddb: DynamoDBDocumentClient, pk: string) {
     this.pk = pk
-    this.skPrefix = skPrefix
   }
 
   /** Static value for the partition key of the table. Defined at constructor by each derived repository entity. */
   protected readonly pk: string
-  /** Static value for the sorted key of the table. Defined at constructor by each derived repository entity.  */
-  protected readonly skPrefix: string
 
   /**
    * Get an instance of type T from the table by the given id.
@@ -123,8 +120,8 @@ export abstract class BaseDynamoRepository<T extends BaseEntity> implements IBas
     }
   }
 
-  private generateId(prefix: string): string {
-    return `${prefix}#${randomUUID()}`
+  private generateId(): string {
+    return randomUUID()
   }
 
   /**
@@ -135,7 +132,7 @@ export abstract class BaseDynamoRepository<T extends BaseEntity> implements IBas
    */
   public async create(entity: T, id: string | undefined = undefined): Promise<T> {
     entity.pk = this.pk
-    entity.sk = id ? id : this.generateId(this.skPrefix)
+    entity.id = id ? id : this.generateId()
     const putCommand = new PutCommand({
       TableName: tableName,
       Item: entity,
@@ -157,7 +154,7 @@ export abstract class BaseDynamoRepository<T extends BaseEntity> implements IBas
       throw new ItemNotFoundError(`Item with id ${id} not found`)
     }
     entity.pk = this.pk
-    entity.sk = id
+    entity.id = id
     if (!updateModel) {
       updateModel = this.getUpdateModel(entity)
     }
@@ -301,6 +298,7 @@ export abstract class BaseDynamoRepository<T extends BaseEntity> implements IBas
   public async delete(id: string): Promise<boolean> {
     const deleteCommand = new DeleteCommand(this.getKeyModel(id))
     const result = await this.ddb.send(deleteCommand)
+    console.log(`delete dynamo: ${JSON.stringify(result, null, 2)}`)
     return result.$metadata.httpStatusCode === 200
   }
 
@@ -338,7 +336,7 @@ export abstract class BaseDynamoRepository<T extends BaseEntity> implements IBas
     const expressionAttributeValues: Record<string, unknown> = {}
 
     for (const [key, value] of Object.entries(entity)) {
-      if (key === 'pk' || key === 'sk' || key === 'id') continue
+      if (key === 'pk' || key === 'id' || key === 'id') continue
       updateExpression.push(`#${key} = :${key}`)
       expressionAttributeNames[`#${key}`] = `${key}`
       expressionAttributeValues[`:${key}`] = value ?? null
@@ -361,7 +359,7 @@ export abstract class BaseDynamoRepository<T extends BaseEntity> implements IBas
       TableName: tableName,
       Key: {
         pk: this.pk,
-        sk: id,
+        id: id,
       },
     }
   }
