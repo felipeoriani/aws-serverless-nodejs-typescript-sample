@@ -7,7 +7,7 @@ Resources:
       AttributeDefinitions:
         - AttributeName: pk
           AttributeType: S
-        - AttributeName: sk
+        - AttributeName: id
           AttributeType: S
         - AttributeName: gsi1pk
           AttributeType: S
@@ -16,7 +16,7 @@ Resources:
       KeySchema:
         - AttributeName: pk
           KeyType: HASH
-        - AttributeName: sk
+        - AttributeName: id
           KeyType: RANGE
       GlobalSecondaryIndexes:
         - IndexName: GSI1

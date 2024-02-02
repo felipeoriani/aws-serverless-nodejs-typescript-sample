@@ -38,19 +38,27 @@ plugins:
   - serverless-deployment-bucket
 
 package:
-  individually: true
+  individually: false
   patterns:
     - '!test/**'
 
 functions:
-  get-flight:
+  get-flight-by-id:
     handler: src/functions/get-flight.handler
     events:
       - httpApi: 'GET /flight'
+  get-flight:
+    handler: src/functions/get-flight-by-id.handler
+    events:
+      - httpApi: 'GET /flight/{id}'
   create-flight:
     handler: src/functions/create-flight.handler
     events:
       - httpApi: 'POST /flight'
+  delete-flight:
+    handler: src/functions/delete-flight.handler
+    events:
+      - httpApi: 'DELETE /flight/{id}'
 
 resources:
   - ${file(resources/database.yml)}
