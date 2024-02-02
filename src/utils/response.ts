@@ -1,6 +1,6 @@
 import { APIGatewayProxyResult } from 'aws-lambda'
 
-type Model = Record<string, unknown> | Record<string, unknown>[] | undefined
+type Model = unknown | undefined
 
 const contentType = { 'Content-Type': 'application/json' }
 
@@ -54,7 +54,7 @@ export const created = (data: Model, location?: string): APIGatewayProxyResult =
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/204
  * @returns Api Gateway message in a 204 No Content format.
  */
-export const noContent = (data: Model): APIGatewayProxyResult => statusCode(204, data)
+export const noContent = (data?: Model): APIGatewayProxyResult => statusCode(204, data)
 
 /**
  * 400 Bad Request response status code indicates that the server cannot or will not process the request due to something that is perceived to be a client error (for example, malformed request syntax, invalid request message framing, or deceptive request routing).
@@ -62,7 +62,15 @@ export const noContent = (data: Model): APIGatewayProxyResult => statusCode(204,
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
  * @returns Api Gateway message in a 400 Bad Request format.
  */
-export const badRequest = (data: Model): APIGatewayProxyResult => statusCode(400, data)
+export const badRequest = (data?: Model): APIGatewayProxyResult => statusCode(400, data)
+
+/**
+ * 404 Not Found status response code indicates that a request has not found the resource give the arguments.
+ * @param data Content to be sent in the response body.
+ * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+ * @returns Api Gateway message in a 404 Not Found format.
+ */
+export const notFound = (data?: Model): APIGatewayProxyResult => statusCode(404, data)
 
 /**
  * 422 Unprocessable Content response status code indicates that the server understands the content type of the request entity, and the syntax of the request entity is correct, but it was unable to process the contained instructions.
@@ -70,4 +78,4 @@ export const badRequest = (data: Model): APIGatewayProxyResult => statusCode(400
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/422
  * @returns Api Gateway message in a 422 Unprocessable Content format.
  */
-export const unprocessableEntity = (data: Model): APIGatewayProxyResult => statusCode(422, data)
+export const unprocessableEntity = (data?: Model): APIGatewayProxyResult => statusCode(422, data)
