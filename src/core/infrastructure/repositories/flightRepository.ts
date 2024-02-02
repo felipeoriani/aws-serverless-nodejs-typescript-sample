@@ -1,7 +1,7 @@
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb'
 import { ddb } from '../dynamo.js'
 import { BaseDynamoRepository } from './baseDynamoRepository.js'
-import { IFlightRepository, Flight, flightPk, flightSkPrefix } from '../../domain/model/flight.js'
+import { IFlightRepository, Flight, flightPk } from '../../domain/model/flight.js'
 
 /**
  * Implementation for IFlightRepository using DynamoDB as the data source.
@@ -13,6 +13,6 @@ import { IFlightRepository, Flight, flightPk, flightSkPrefix } from '../../domai
  */
 export class FlightRepository extends BaseDynamoRepository<Flight> implements IFlightRepository {
   constructor(ddbDocumentClient: DynamoDBDocumentClient = ddb) {
-    super(ddbDocumentClient, flightPk, flightSkPrefix)
+    super(ddbDocumentClient, flightPk)
   }
 }

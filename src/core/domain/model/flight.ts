@@ -2,7 +2,6 @@ import { GetPagedResult, IBaseRepository } from '../repository/repository.js'
 import { BaseEntity } from './base.js'
 
 export const flightPk = 'flight'
-export const flightSkPrefix = 'fly'
 
 export interface Flight extends BaseEntity {
   source: string
@@ -14,9 +13,9 @@ export interface Flight extends BaseEntity {
 export interface IFlightRepository extends IBaseRepository<Flight> {}
 
 export interface IFlightService {
-  get(id: string): Promise<Flight>
+  get(id: string): Promise<Flight | undefined>
   getPaged(count?: number | undefined, nextToken?: string | undefined): Promise<GetPagedResult<Flight>>
-  create(task: Flight): Promise<Flight>
-  update(id: string, task: Flight): Promise<Flight>
-  delete(id: string): Promise<void>
+  create(model: Flight): Promise<Flight>
+  update(id: string, model: Flight): Promise<Flight>
+  delete(id: string): Promise<boolean>
 }
