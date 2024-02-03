@@ -18,6 +18,8 @@ provider:
     serverSideEncryption: AES256
   apiGateway:
     shouldStartNameWithService: true
+  httpApi:
+    cors: true
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -46,19 +48,19 @@ functions:
   get-flight-by-id:
     handler: src/functions/get-flight.handler
     events:
-      - httpApi: 'GET /flight'
+      - httpApi: 'GET /v1/flights'
   get-flight:
     handler: src/functions/get-flight-by-id.handler
     events:
-      - httpApi: 'GET /flight/{id}'
+      - httpApi: 'GET /v1/flights/{id}'
   create-flight:
     handler: src/functions/create-flight.handler
     events:
-      - httpApi: 'POST /flight'
+      - httpApi: 'POST /v1/flights'
   delete-flight:
     handler: src/functions/delete-flight.handler
     events:
-      - httpApi: 'DELETE /flight/{id}'
+      - httpApi: 'DELETE /v1/flights/{id}'
 
 resources:
   - ${file(resources/database.yml)}
