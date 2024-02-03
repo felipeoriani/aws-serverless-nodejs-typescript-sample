@@ -1,8 +1,9 @@
+import { ValidateableResponse } from 'src/utils/validateable-response.js'
 import { GetPagedResult, IBaseRepository } from '../repository/repository.js'
-import { BaseEntity } from './base.js'
+import { Entity } from './base.js'
 import joi from 'joi'
 
-export interface Flight extends BaseEntity {
+export interface Flight extends Entity {
   from: string
   to: string
   date: Date
@@ -11,11 +12,14 @@ export interface Flight extends BaseEntity {
 export interface IFlightRepository extends IBaseRepository<Flight> {}
 
 export interface IFlightService {
-  get(id: string): Promise<Flight | undefined>
-  getPaged(count?: number | undefined, nextToken?: string | undefined): Promise<GetPagedResult<Flight>>
-  create(model: Flight): Promise<Flight>
-  update(id: string, model: Flight): Promise<Flight>
-  delete(id: string): Promise<boolean>
+  get(id: string): Promise<ValidateableResponse<Flight>>
+  getPaged(
+    count?: number | undefined,
+    nextToken?: string | undefined
+  ): Promise<ValidateableResponse<GetPagedResult<Flight>>>
+  create(input: Flight): Promise<ValidateableResponse<Flight>>
+  update(id: string, input: Flight): Promise<ValidateableResponse<Flight>>
+  delete(id: string): Promise<ValidateableResponse<boolean>>
 }
 
 export const flightValidator = joi.object<Flight>().keys({

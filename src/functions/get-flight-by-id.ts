@@ -12,7 +12,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
   const flightService = new FlightService()
   const result = await flightService.get(id)
 
-  if (!result) {
+  if (!result.model) {
     return notFound()
   }
 

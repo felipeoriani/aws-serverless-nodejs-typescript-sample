@@ -1,5 +1,5 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
-import { badRequest, noContent, notFound } from '../utils/response.js'
+import { badRequest, noContent, notFound, unprocessableEntity } from '../utils/response.js'
 import { FlightService } from '../core/application/flightService.js'
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
@@ -14,5 +14,13 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
   const flightService = new FlightService()
   const result = await flightService.delete(id)
 
-  return result ? noContent() : notFound()
+  if (result.errors) {
+    return unprocessableEntity(result.errors)
+  }
+
+  if (!result.model) {
+    return notFound()
+  }
+
+  return noContent()
 }

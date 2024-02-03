@@ -1,3 +1,4 @@
+import { ValidateableResponse } from 'src/utils/validateable-response.js'
 import { Flight, IFlightRepository, IFlightService, flightValidator } from '../domain/model/flight.js'
 import { GetPagedResult } from '../domain/repository/repository.js'
 import { FlightRepository } from '../infrastructure/repositories/flightRepository.js'
@@ -5,35 +6,41 @@ import { FlightRepository } from '../infrastructure/repositories/flightRepositor
 export class FlightService implements IFlightService {
   constructor(private flightRepository: IFlightRepository = new FlightRepository()) {}
 
-  public async get(id: string): Promise<Flight | undefined> {
-    const flight = await this.flightRepository.get(id)
-    if (!flight) {
-      return undefined
-    }
-    return flight
+  public async get(id: string): Promise<ValidateableResponse<Flight>> {
+    const model = await this.flightRepository.get(id)
+    return { model }
   }
 
-  public getPaged(count?: number | undefined, nextToken?: string | undefined): Promise<GetPagedResult<Flight>> {
-    return this.flightRepository.getPaged(count, nextToken)
+  public async getPaged(
+    count?: number | undefined,
+    nextToken?: string | undefined
+  ): Promise<ValidateableResponse<GetPagedResult<Flight>>> {
+    const model = await this.flightRepository.getPaged(count, nextToken)
+    return { model }
   }
 
-  public create(model: Flight): Promise<Flight> {
-    const validation = flightValidator.validate(model)
+  public async create(input: Flight): Promise<ValidateableResponse<Flight>> {
+    const validation = flightValidator.validate(input)
     if (validation.error) {
-      throw new Error(validation.error.message)
+      const errors = validation.error.details.map((x) => x.message)
+      return { errors }
     }
-    return this.flightRepository.create(model)
+    const model = await this.flightRepository.create(input)
+    return { model }
   }
 
-  public update(id: string, model: Flight): Promise<Flight> {
-    const validation = flightValidator.validate(model)
+  public async update(id: string, input: Flight): Promise<ValidateableResponse<Flight>> {
+    const validation = flightValidator.validate(input)
     if (validation.error) {
-      throw new Error(validation.error.message)
+      const errors = validation.error.details.map((x) => x.message)
+      return { errors }
     }
-    return this.flightRepository.update(id, model)
+    const model = await this.flightRepository.update(id, input)
+    return { model }
   }
 
-  public delete(id: string): Promise<boolean> {
-    return this.flightRepository.delete(id)
+  public async delete(id: string): Promise<ValidateableResponse<boolean>> {
+    const result = await this.flightRepository.delete(id)
+    return { model: result }
   }
 }
