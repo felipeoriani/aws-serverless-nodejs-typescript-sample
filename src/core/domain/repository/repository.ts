@@ -77,7 +77,7 @@ export interface IBaseRepository<T extends Entity> {
 export interface GetPagedResult<T> {
   items: T[]
   nextToken?: string
-  count: number | undefined
+  count?: number
 }
 
 /**

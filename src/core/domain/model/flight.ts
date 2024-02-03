@@ -1,13 +1,11 @@
 import { GetPagedResult, IBaseRepository } from '../repository/repository.js'
 import { BaseEntity } from './base.js'
-
-export const flightPk = 'flight'
+import joi from 'joi'
 
 export interface Flight extends BaseEntity {
-  source: string
-  destionation: string
+  from: string
+  to: string
   date: Date
-  company: string
 }
 
 export interface IFlightRepository extends IBaseRepository<Flight> {}
@@ -19,3 +17,9 @@ export interface IFlightService {
   update(id: string, model: Flight): Promise<Flight>
   delete(id: string): Promise<boolean>
 }
+
+export const flightValidator = joi.object<Flight>().keys({
+  from: joi.string().required().min(3).max(100),
+  to: joi.string().required().min(3).max(100),
+  date: joi.date().required(),
+})

@@ -1,4 +1,4 @@
-import { Flight, IFlightRepository, IFlightService } from '../domain/model/flight.js'
+import { Flight, IFlightRepository, IFlightService, flightValidator } from '../domain/model/flight.js'
 import { GetPagedResult } from '../domain/repository/repository.js'
 import { FlightRepository } from '../infrastructure/repositories/flightRepository.js'
 
@@ -18,10 +18,18 @@ export class FlightService implements IFlightService {
   }
 
   public create(model: Flight): Promise<Flight> {
+    const validation = flightValidator.validate(model)
+    if (validation.error) {
+      throw new Error(validation.error.message)
+    }
     return this.flightRepository.create(model)
   }
 
   public update(id: string, model: Flight): Promise<Flight> {
+    const validation = flightValidator.validate(model)
+    if (validation.error) {
+      throw new Error(validation.error.message)
+    }
     return this.flightRepository.update(id, model)
   }
 
