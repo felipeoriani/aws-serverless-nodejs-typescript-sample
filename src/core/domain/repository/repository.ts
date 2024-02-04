@@ -108,5 +108,5 @@ export interface KeyModel {
   /** Table name to be defined at the runtime */
   TableName: string | undefined
   /** Partition key and Sort key to be defined to search by an item on DynamoDB table. */
-  Key: BaseEntity
+  Key: Entity
 }

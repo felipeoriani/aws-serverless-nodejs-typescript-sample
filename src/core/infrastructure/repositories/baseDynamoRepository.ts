@@ -14,7 +14,7 @@ import {
   BatchGetCommandOutput,
 } from '@aws-sdk/lib-dynamodb'
 import { randomUUID } from 'crypto'
-import { BaseEntity } from 'src/core/domain/model/base.js'
+import { Entity } from 'src/core/domain/model/base.js'
 import { GetPagedResult, IBaseRepository, KeyModel, UpdateModel } from 'src/core/domain/repository/repository.js'
 
 const dynamoDbWriteBatchSize = 25
@@ -30,7 +30,7 @@ const tableName = process.env.TABLE_NAME as string
  * @param skPrefix Constant for the sort key prefix of the table.
  * @returns An instance of the derived repository class.
  */
-export abstract class BaseDynamoRepository<T extends BaseEntity> implements IBaseRepository<T> {
+export abstract class BaseDynamoRepository<T extends Entity> implements IBaseRepository<T> {
   /**
    * Base constructor for a new instance of any derived base repository class.
    * @param ddb Instance for DynamoDBDocumentClient.
