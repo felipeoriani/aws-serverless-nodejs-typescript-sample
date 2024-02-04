@@ -3,22 +3,26 @@ import { GetPagedResult, IBaseRepository } from '../repository/repository.js'
 import { Entity } from './base.js'
 import joi from 'joi'
 
-export interface Flight extends Entity {
+/** FLight entity that represents a flight containing all the info */
+export type Flight = Entity & {
   from: string
   to: string
   date: Date
 }
 
+/** Flight Model to responde from the UseCases services for the application */
+export type FlightModel = Omit<Flight, Exclude<keyof Entity, 'id'>>
+
 export interface IFlightRepository extends IBaseRepository<Flight> {}
 
 export interface IFlightService {
-  get(id: string): Promise<ValidateableResponse<Flight>>
+  get(id: string): Promise<ValidateableResponse<FlightModel>>
   getPaged(
     count?: number | undefined,
     nextToken?: string | undefined
-  ): Promise<ValidateableResponse<GetPagedResult<Flight>>>
-  create(input: Flight): Promise<ValidateableResponse<Flight>>
-  update(id: string, input: Flight): Promise<ValidateableResponse<Flight>>
+  ): Promise<ValidateableResponse<GetPagedResult<FlightModel>>>
+  create(input: FlightModel): Promise<ValidateableResponse<FlightModel>>
+  update(id: string, input: FlightModel): Promise<ValidateableResponse<FlightModel>>
   delete(id: string): Promise<ValidateableResponse<boolean>>
 }
 

@@ -1,6 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import { badRequest, noContent, notFound, unprocessableEntity } from '../utils/response.js'
-import { FlightService } from '../core/application/flightService.js'
+import { FlightService } from '../core/application/flight-service.js'
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   console.log(`event: ${JSON.stringify(event, null, 2)}`)
