@@ -43,13 +43,14 @@ package:
   individually: false
   patterns:
     - '!test/**'
+    - '!src/index.ts'
 
 functions:
-  get-flight-by-id:
+  get-flight:
     handler: src/functions/get-flight.handler
     events:
       - httpApi: 'GET /v1/flights'
-  get-flight:
+  get-flight-by-id:
     handler: src/functions/get-flight-by-id.handler
     events:
       - httpApi: 'GET /v1/flights/{id}'
