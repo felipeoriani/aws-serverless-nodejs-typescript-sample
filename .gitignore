@@ -5,3 +5,5 @@ jspm_packages
 # build
 .build
 .serverless
+
+src/index.ts

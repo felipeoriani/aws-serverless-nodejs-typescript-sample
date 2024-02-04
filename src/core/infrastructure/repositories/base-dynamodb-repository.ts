@@ -15,7 +15,7 @@ import {
 } from '@aws-sdk/lib-dynamodb'
 import { randomUUID } from 'crypto'
 import { Entity } from 'src/core/domain/model/base.js'
-import { GetPagedResult, IBaseRepository, KeyModel, UpdateModel } from 'src/core/domain/repository/repository.js'
+import { GetPagedResult, IBaseRepository, KeyModel, UpdateModel } from 'src/core/domain/repository/base-repository.js'
 
 const dynamoDbWriteBatchSize = 25
 const dynamoDbGetBatchSize = 100

@@ -1,7 +1,7 @@
 import { ValidateableResponse } from 'src/utils/validateable-response.js'
 import { Flight, FlightModel, IFlightRepository, IFlightService, flightValidator } from '../domain/model/flight.js'
-import { GetPagedResult } from '../domain/repository/repository.js'
-import { FlightRepository } from '../infrastructure/repositories/flightRepository.js'
+import { GetPagedResult } from '../domain/repository/base-repository.js'
+import { FlightRepository } from '../infrastructure/repositories/flight-repository.js'
 
 export class FlightService implements IFlightService {
   constructor(private flightRepository: IFlightRepository = new FlightRepository()) {}

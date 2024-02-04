@@ -1,4 +1,4 @@
-import { BaseEntity, Entity } from '../model/base.js'
+import { Entity } from '../model/base.js'
 
 /**
  * Abstract interface for a base repository.

@@ -1,6 +1,6 @@
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb'
 import { ddb } from '../dynamo.js'
-import { BaseDynamoRepository } from './baseDynamoRepository.js'
+import { BaseDynamoRepository } from './base-dynamodb-repository.js'
 import { IFlightRepository, Flight } from '../../domain/model/flight.js'
 
 /**
