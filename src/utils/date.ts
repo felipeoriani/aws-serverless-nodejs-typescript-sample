@@ -7,6 +7,10 @@ export function toUnixTime(date: Date): number {
   return Math.floor(date.getTime() / 1000)
 }
 
+export function toDateFromISO(isoDate: string): Date {
+  return fromUnixTime(Date.parse(isoDate))
+}
+
 /**
  * Get the date from a unix time format number.
  * @param epoch Unix time format number.
