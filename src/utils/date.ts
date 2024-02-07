@@ -7,10 +7,6 @@ export function toUnixTime(date: Date): number {
   return Math.floor(date.getTime() / 1000)
 }
 
-export function toDateFromISO(isoDate: string): Date {
-  return fromUnixTime(Date.parse(isoDate))
-}
-
 /**
  * Get the date from a unix time format number.
  * @param epoch Unix time format number.
@@ -18,6 +14,15 @@ export function toDateFromISO(isoDate: string): Date {
  */
 export function fromUnixTime(epoch: number): Date {
   return new Date(epoch * 1000)
+}
+
+/**
+ * Get a string into ISO format and convert it to a Date.
+ * @param isoDate ISO date string format.
+ * @returns Date instance represented by the Date.
+ */
+export function fromISOToDate(isoDate: string): Date {
+  return new Date(isoDate)
 }
 
 /**
