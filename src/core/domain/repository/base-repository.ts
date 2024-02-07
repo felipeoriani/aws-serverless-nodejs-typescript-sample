@@ -1,9 +1,9 @@
-import { Entity } from '../model/base.js'
+import { BaseEntity } from '../model/base.js'
 
 /**
  * Abstract interface for a base repository.
  */
-export interface IBaseRepository<T extends Entity> {
+export interface IBaseRepository<T extends BaseEntity> {
   /**
    * Get an instance of type T from the table by the given id.
    * @param id The id of the entity
@@ -99,14 +99,4 @@ export interface UpdateModel {
    * @example {":name": "John Doe", ":age": 30, ":address": "123 Main St"}
    */
   ExpressionAttributeValues: Record<string, unknown> | undefined
-}
-
-/**
- * This interface defines the structure to identiy an object on a DynamoDB table operations such as `ScanCommand`, `UpdateCommand`, `DeleteCommand` and other.
- */
-export interface KeyModel {
-  /** Table name to be defined at the runtime */
-  TableName: string | undefined
-  /** Partition key and Sort key to be defined to search by an item on DynamoDB table. */
-  Key: Entity
 }

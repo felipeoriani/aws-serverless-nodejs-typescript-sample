@@ -14,8 +14,10 @@ import {
   BatchGetCommandOutput,
 } from '@aws-sdk/lib-dynamodb'
 import { randomUUID } from 'crypto'
-import { Entity } from 'src/core/domain/model/base.js'
-import { GetPagedResult, IBaseRepository, KeyModel, UpdateModel } from 'src/core/domain/repository/base-repository.js'
+
+import { GetPagedResult, IBaseRepository, UpdateModel } from 'src/core/domain/repository/base-repository.js'
+import { DynamoModel } from './dynamo-model.js'
+import { BaseEntity } from 'src/core/domain/model/base.js'
 
 const dynamoDbWriteBatchSize = 25
 const dynamoDbGetBatchSize = 100
@@ -30,7 +32,7 @@ const tableName = process.env.TABLE_NAME as string
  * @param skPrefix Constant for the sort key prefix of the table.
  * @returns An instance of the derived repository class.
  */
-export abstract class BaseDynamoRepository<T extends Entity> implements IBaseRepository<T> {
+export abstract class BaseDynamoRepository<T extends BaseEntity> implements IBaseRepository<T> {
   /**
    * Base constructor for a new instance of any derived base repository class.
    * @param ddb Instance for DynamoDBDocumentClient.
@@ -52,7 +54,9 @@ export abstract class BaseDynamoRepository<T extends Entity> implements IBaseRep
   public async get(id: string): Promise<T | undefined> {
     const getCommand = new GetCommand(this.getKeyModel(id))
     const result = await this.ddb.send(getCommand)
-    if (result.Item) return result.Item as T
+    if (result.Item) {
+      return this.handleEntity(result.Item)
+    }
     return undefined
   }
 
@@ -111,17 +115,21 @@ export abstract class BaseDynamoRepository<T extends Entity> implements IBaseRep
 
     const result = await this.ddb.send(queryCommand)
 
+    if (!result.Items) {
+      return {
+        items: [],
+      }
+    }
+
+    const items = result.Items.map((item) => this.handleEntity(item))
+    count = result.Count
     nextToken = this.getNextToken(result.LastEvaluatedKey)
 
     return {
-      items: result.Items as T[],
-      count: result.Count,
-      nextToken: nextToken,
+      items,
+      count,
+      nextToken,
     }
-  }
-
-  private generateId(): string {
-    return randomUUID()
   }
 
   /**
@@ -131,14 +139,19 @@ export abstract class BaseDynamoRepository<T extends Entity> implements IBaseRep
    * @returns The created instance of the entity.
    */
   public async create(entity: T, id: string | undefined = undefined): Promise<T> {
-    entity.pk = this.pk
-    entity.id = id ? id : this.generateId()
+    const dynamoModel = entity as unknown as DynamoModel
+    // set the PartitionKey
+    dynamoModel.pk = this.pk
+    // set the SortedKey
+    dynamoModel.id = id ? id : this.generateId()
+    // handle custom fields
+    const model = this.handleModel(dynamoModel as unknown as T)
     const putCommand = new PutCommand({
       TableName: tableName,
-      Item: entity,
+      Item: model,
     })
     await this.ddb.send(putCommand)
-    return entity
+    return this.handleEntity(entity)
   }
 
   /**
@@ -153,10 +166,9 @@ export abstract class BaseDynamoRepository<T extends Entity> implements IBaseRep
     if (!currentItem) {
       throw new ItemNotFoundError(`Item with id ${id} not found`)
     }
-    entity.pk = this.pk
-    entity.id = id
+    const model = this.handleModel(entity)
     if (!updateModel) {
-      updateModel = this.getUpdateModel(entity)
+      updateModel = this.getUpdateModel(model)
     }
     const keyModel = this.getKeyModel(id)
     const updateCommand = new UpdateCommand({
@@ -164,7 +176,7 @@ export abstract class BaseDynamoRepository<T extends Entity> implements IBaseRep
       ...updateModel,
     })
     await this.ddb.send(updateCommand)
-    return entity
+    return this.handleEntity(entity)
   }
 
   /**
@@ -206,7 +218,7 @@ export abstract class BaseDynamoRepository<T extends Entity> implements IBaseRep
 
     for (const getBatchResult of batchResults) {
       getBatchResult.Responses?.[tableName]?.forEach((item) => {
-        result.push(item as T)
+        result.push(this.mapEntity(item))
       })
     }
 
@@ -349,6 +361,25 @@ export abstract class BaseDynamoRepository<T extends Entity> implements IBaseRep
     }
   }
 
+  protected mapEntity(record: Record<string, unknown>): T {
+    return record as unknown as T
+  }
+
+  protected handleModel(entity: T): T {
+    return entity
+  }
+
+  private handleEntity(record: Record<string, unknown>): T {
+    const model = record as unknown as DynamoModel
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { pk, gsi1pk, gsi1sk, ...rest } = model
+    return this.mapEntity(rest)
+  }
+
+  private generateId(): string {
+    return randomUUID()
+  }
+
   /**
    * This method returns an object to be used as part of GetCommand and DeleteCommand on DynamoDb operations.
    * @param id The id of the entity
@@ -363,6 +394,16 @@ export abstract class BaseDynamoRepository<T extends Entity> implements IBaseRep
       },
     }
   }
+}
+
+/**
+ * This interface defines the structure to identiy an object on a DynamoDB table operations such as `ScanCommand`, `UpdateCommand`, `DeleteCommand` and other.
+ */
+export interface KeyModel {
+  /** Table name to be defined at the runtime */
+  TableName: string | undefined
+  /** Partition key and Sort key to be defined to search by an item on DynamoDB table. */
+  Key: Record<string, unknown>
 }
 
 export class ItemNotFoundError extends Error {}
