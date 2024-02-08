@@ -17,8 +17,12 @@ export interface IFlightRepository extends IBaseRepository<Flight> {}
 export interface IFlightService {
   get(id: string): Promise<ValidateableResponse<Flight>>
   getPaged(
-    count?: number | undefined,
-    nextToken?: string | undefined
+    startDate?: string,
+    endDate?: string,
+    from?: string,
+    to?: string,
+    count?: number,
+    nextToken?: string
   ): Promise<ValidateableResponse<GetPagedResult<Flight>>>
   create(input: Flight): Promise<ValidateableResponse<Flight>>
   update(id: string, input: Flight): Promise<ValidateableResponse<Flight>>

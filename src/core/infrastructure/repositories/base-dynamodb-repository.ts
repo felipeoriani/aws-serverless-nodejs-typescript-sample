@@ -12,6 +12,7 @@ import {
   BatchGetCommand,
   BatchGetCommandInput,
   BatchGetCommandOutput,
+  QueryCommandInput,
 } from '@aws-sdk/lib-dynamodb'
 import { randomUUID } from 'crypto'
 
@@ -315,6 +316,56 @@ export abstract class BaseDynamoRepository<T extends BaseEntity> implements IBas
   }
 
   /**
+   * Run a DynamoDb query command using an index. On our project the indexes are defined as GSIx, where `x` is a number.
+   * @param index Index number.
+   * @param gsipk Value to search on the PK of the index.
+   * @param gsisk Value to search on the SK of the index. It is optional and will not be used if not provided.
+   * @param count Number of items to be returned.
+   * @param nextToken NextToken to use for the pagination.
+   * @returns Get all the entities of type T from the table following the filter index and pagination arguments.
+   */
+  protected async getByGSI(
+    index: number,
+    gsipk: string,
+    gsisk?: string | undefined,
+    count?: number | undefined,
+    nextToken?: string | undefined
+  ): Promise<GetPagedResult<T>> {
+    const exclusiveStartKey = this.getExclusiveStartKey(nextToken)
+
+    let keyConditionExpression = `gsi${index}pk = :gsipk`
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const expressionAttributeValues: Record<string, any> = { ':gsipk': gsipk }
+
+    if (gsisk) {
+      keyConditionExpression += ` AND gsi${index}sk = :gsisk`
+      expressionAttributeValues[':gsisk'] = gsisk
+    }
+
+    const queryParam: QueryCommandInput = {
+      TableName: tableName,
+      IndexName: `GSI${index}`,
+      KeyConditionExpression: keyConditionExpression,
+      ExpressionAttributeValues: expressionAttributeValues,
+    }
+
+    if (count) {
+      queryParam.Limit = count
+      queryParam.ExclusiveStartKey = exclusiveStartKey
+    }
+
+    const queryCommand = new QueryCommand(queryParam)
+    const result = await this.ddb.send(queryCommand)
+    nextToken = this.getNextToken(result.LastEvaluatedKey)
+
+    return {
+      items: (result.Items ?? []).map((x) => this.handleEntity(x)),
+      count: result.Count,
+      nextToken: nextToken,
+    }
+  }
+
+  /**
    * Get the exclusive start key for the `ScanCommand` on DynamoDb.
    * @param nextToken Token returned from the previous operation when available.
    * @returns The generated result token can be used to start point on the `ScanCommand` operation.
@@ -369,7 +420,7 @@ export abstract class BaseDynamoRepository<T extends BaseEntity> implements IBas
     return entity
   }
 
-  private handleEntity(record: Record<string, unknown>): T {
+  protected handleEntity(record: Record<string, unknown>): T {
     const model = record as unknown as DynamoModel
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { pk, gsi1pk, gsi1sk, ...rest } = model
