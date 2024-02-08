@@ -17,10 +17,23 @@ export class FlightService implements IFlightService {
   }
 
   public async getPaged(
-    count?: number | undefined,
-    nextToken?: string | undefined
+    startDate?: string,
+    endDate?: string,
+    from?: string,
+    to?: string,
+    count?: number,
+    nextToken?: string
   ): Promise<ValidateableResponse<GetPagedResult<Flight>>> {
-    const pagedResult = await this.flightRepository.getPaged(count, nextToken)
+    const startDateFilter = new Date(startDate!)
+    const endDateFilter = new Date(endDate!)
+    const pagedResult = await this.flightRepository.getPagedByFilters(
+      startDateFilter,
+      endDateFilter,
+      from,
+      to,
+      count,
+      nextToken
+    )
     return {
       model: {
         count: pagedResult.count,

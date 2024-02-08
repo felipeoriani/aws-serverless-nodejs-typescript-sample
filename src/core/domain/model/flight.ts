@@ -12,7 +12,16 @@ export type Flight = BaseEntity & {
   airline: string
 }
 
-export interface IFlightRepository extends IBaseRepository<Flight> {}
+export interface IFlightRepository extends IBaseRepository<Flight> {
+  getPagedByFilters(
+    startDate?: Date,
+    endDate?: Date,
+    from?: string,
+    to?: string,
+    count?: number,
+    nextToken?: string
+  ): Promise<GetPagedResult<Flight>>
+}
 
 export interface IFlightService {
   get(id: string): Promise<ValidateableResponse<Flight>>
