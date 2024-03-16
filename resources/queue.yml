@@ -1,0 +1,9 @@
+Resources:
+  CheckInFlightQueue:
+    Type: 'AWS::SQS::Queue'
+    Properties:
+      QueueName: ${self:custom.checkInFlightQueue}
+  CheckInPassengerQueue:
+    Type: 'AWS::SQS::Queue'
+    Properties:
+      QueueName: ${self:custom.checkInPassengerQueue}
