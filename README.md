@@ -39,4 +39,8 @@ All the layers are in the low coupling to be able to future change the implement
 
 ### Tests
 
-There are a few unit tests in progress to cover the main business rules on the application layer of the project.
+There are a few unit tests in progress to cover the main business rules on the application layer of the project. It is implemented on the top of native `Node Test Runner` and to run it locally, you can run `yarn test` or `npm test`.
+
+<p align=center>
+<img src="docs/test-results.png" width="450" />
+</p>
