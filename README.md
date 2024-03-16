@@ -21,10 +21,20 @@ This is a sample project using part of the stack I have used to work in my caree
 
 ### Architecture
 
+#### Rest API
+
 The architecture consists in a serverless Rest API using Serverless Framework within the AWS as Cloud Provider. Through an `API Gateway`, `Lambdas` receive a request, process it and return a message to the `API Gateway` which responds to clients using the `HTTP` protocol. All the data is persisted into a `AWS DynamoDB` table which is defined on the serverless yml file. In the future, there will be a `Flight` notification via `SQS Queue` for each `Passenger` when it is open to _Check-in_ action.
 
 <p align=center>
-<img src="docs/diagram.svg" />
+  <img src="docs/rest-api-diagram.svg" alt="Architecture Diagram for Flight Service" />
+</p>
+
+#### Events
+
+There is an in progress event series that for every `x` minutes in order to notify all the passengers that have a scheduled flight for the next `x` hours. Check the following diagram for the events.
+
+<p align=center>
+  <img src="docs/events-diagram.svg" alt="Event Diagram for Flight Service" />
 </p>
 
 #### Code Architecture
