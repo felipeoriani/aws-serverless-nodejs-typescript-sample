@@ -26,3 +26,17 @@ The architecture consists in a serverless Rest API using Serverless Framework wi
 <p align=center>
 <img src="docs/diagram.svg" />
 </p>
+
+#### Code Architecture
+
+The code presents a [Layered Architecture](https://www.oreilly.com/library/view/software-architecture-patterns/9781491971437/ch01.html) using `Node.Js` and `Typescript` which will be transpiled to `Javascript` as the main language of the Node.Js runtime. It contains an `Domain Layer` where keep the domain of the project including Flight and Passengers and abstractions for storage and business rules. Then we have the `Infrastructure Layer` to maintain all the code related to I/O bound operations specially network calls such as cloud services implementations which includes database, queues, cloud services, external services, etc. And finally we have the `Application Layer` which is responsable to hold the business rules.
+
+All the layers are in the low coupling to be able to future change the implementation so each component depends on abstractions instead concrete types. It also make our tests easy to simulate some behaviour we may want to test using Mocks. In the code, you can find it under the `./src/core` folder like the image bellow:
+
+<p align=center>
+<img src="docs/code-architecture.png" />
+</p>
+
+### Tests
+
+There are a few unit tests in progress to cover the main business rules on the application layer of the project.
