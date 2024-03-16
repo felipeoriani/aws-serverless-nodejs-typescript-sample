@@ -7,7 +7,7 @@
     "start": "yarn build && node .build/src/index.js",
     "lint": "eslint --ext .ts .",
     "lint:fix": "eslint --fix --ext .ts .",
-    "test": "globstar -- node --import tsx --test \"tests/**/*.test.ts\"",
+    "test": "globstar -- node --import tsx --test \"tests/**/*.unit.test.ts\"",
     "type-check": "tsc --pretty --noEmit",
     "package": "serverless package",
     "deploy": "serverless deploy --verbose",

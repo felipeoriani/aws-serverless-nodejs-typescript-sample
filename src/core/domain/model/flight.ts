@@ -39,7 +39,7 @@ export interface IFlightService {
 }
 
 export const flightValidator = joi.object<Flight>().keys({
-  code: joi.string().required().alphanum().min(3).max(12),
+  code: joi.string().required().alphanum().min(3).max(8),
   from: joi.string().required().min(3).max(100),
   to: joi.string().required().min(3).max(100),
   date: joi.date().required(),

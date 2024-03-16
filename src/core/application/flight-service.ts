@@ -10,7 +10,7 @@ export class FlightService implements IFlightService {
     const model = await this.flightRepository.get(id)
     if (!model) {
       return {
-        errors: [`There is not flight for the id '${id}'`],
+        errors: [`There is not a flight for the id '${id}'.`],
       }
     }
     return { model }
