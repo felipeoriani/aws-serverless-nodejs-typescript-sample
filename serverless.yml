@@ -6,6 +6,9 @@ custom:
   stage: ${opt:stage, 'dev'}
   region: us-east-1
   tableName: ${self:service}-table-${self:custom.stage}
+  checkInTrigger: ${self:service}-check-in-trigger-${self:custom.stage}
+  checkInFlightQueue: ${self:service}-check-in-queue-${self:custom.stage}
+  checkInPassengerQueue: ${self:service}-check-in-passenger-queue-${self:custom.stage}
 
 provider:
   name: aws
@@ -32,6 +35,12 @@ provider:
         - dynamodb:DeleteItem
       Resource:
         - 'Fn::GetAtt': [FlightTable, Arn]
+    - Effect: Allow
+      Action:
+        - sqs:SendMessage
+      Resource:
+        - !GetAtt CheckInFlightQueue.Arn
+        - !GetAtt CheckInPassengerQueue.Arn
   environment:
     TABLE_NAME: ${self:custom.tableName}
 
@@ -50,18 +59,43 @@ functions:
     handler: src/functions/get-flight.handler
     events:
       - httpApi: 'GET /v1/flights'
+
   get-flight-by-id:
     handler: src/functions/get-flight-by-id.handler
     events:
       - httpApi: 'GET /v1/flights/{id}'
+
   create-flight:
     handler: src/functions/create-flight.handler
     events:
       - httpApi: 'POST /v1/flights'
+
   delete-flight:
     handler: src/functions/delete-flight.handler
     events:
       - httpApi: 'DELETE /v1/flights/{id}'
 
+  check-in-start:
+    handler: src/functions/check-in-start.handler
+    events:
+      - eventBridge:
+          name: ${self:custom.checkInTrigger}
+          description: 'Trigger to run the Check-in event on the Flight Service.'
+          enabled: true
+          schedule: rate(50 minutes)
+
+  check-in-flight:
+    handler: src/functions/check-in-flight-notifier.handler
+    events:
+      - sqs:
+          arn: !GetAtt CheckInFlightQueue.Arn
+
+  check-in-passenger:
+    handler: src/functions/check-in-passenger-notifier.handler
+    events:
+      - sqs:
+          arn: !GetAtt CheckInPassengerQueue.Arn
+
 resources:
   - ${file(resources/database.yml)}
+  - ${file(resources/queue.yml)}
