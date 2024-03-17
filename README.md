@@ -6,16 +6,16 @@ This is a sample project using part of the stack I have used to work in my caree
 
 <table align=center border=1 width=100%>
   <tr>
-    <td align=center valign=bottom><img src="https://upload.wikimedia.org/wikipedia/commons/d/d9/Node.js_logo.svg" alt="Node.Js" width="150" height="auto" /><br/>Node.Js</td>
-    <td align=center valign=bottom><img src="https://upload.wikimedia.org/wikipedia/commons/4/4c/Typescript_logo_2020.svg" alt="Typescript" width="150" height="auto" /><br/>Typescript</td>
-    <td align=center valign=bottom><img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" alt="Amazon Web Services" width="150" height="auto" /><br/>Amazon Web Services</td>
-    <td align=center valign=bottom><img src="https://user-images.githubusercontent.com/2752551/30405069-a7751fee-989e-11e7-9a58-f93f8e820bd1.png" alt="Serverless" width="150" height="auto" /><br/>Serverless Framework</td>
+    <td align=center valign=bottom width=25%><img src="https://upload.wikimedia.org/wikipedia/commons/d/d9/Node.js_logo.svg" alt="Node.Js" height="auto" /><br/>Node.Js</td>
+    <td align=center valign=bottom width=25%><img src="https://upload.wikimedia.org/wikipedia/commons/4/4c/Typescript_logo_2020.svg" alt="Typescript" height="auto" /><br/>Typescript</td>
+    <td align=center valign=bottom width=25%><img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" alt="Amazon Web Services" height="auto" /><br/>Amazon Web Services</td>
+    <td align=center valign=bottom width=25%><img src="https://user-images.githubusercontent.com/2752551/30405069-a7751fee-989e-11e7-9a58-f93f8e820bd1.png" alt="Serverless" height="auto" /><br/>Serverless Framework</td>
   </tr>
   <tr>
-    <td align=center valign=bottom><img src="https://cdn.worldvectorlogo.com/logos/aws-api-gateway.svg" alt="AWS API Gateway" width="150" height="auto" /><br/>AWS API Gateway</td>
-    <td align=center valign=bottom><img src="https://cdn.worldvectorlogo.com/logos/aws-lambda.svg" alt="AWS Lambda" width="150" height="auto" /><br/>AWS Lambda</td>
-    <td align=center valign=bottom><img src="https://cdn.worldvectorlogo.com/logos/aws-dynamodb.svg" alt="AWS DynamoDB" width="150" height="auto" /><br/>AWS DynamoDB</td>
-    <td align=center valign=bottom><img src="https://cdn.worldvectorlogo.com/logos/aws-cloudformation.svg" alt="AWS Cloud Formation" width="150" height="auto" /><br/>AWS Cloud Formation</td>    
+    <td align=center valign=bottom><img src="https://cdn.worldvectorlogo.com/logos/aws-api-gateway.svg" alt="AWS API Gateway" height="auto" /><br/>AWS API Gateway</td>
+    <td align=center valign=bottom><img src="https://cdn.worldvectorlogo.com/logos/aws-lambda.svg" alt="AWS Lambda" height="auto" /><br/>AWS Lambda</td>
+    <td align=center valign=bottom><img src="https://cdn.worldvectorlogo.com/logos/aws-dynamodb.svg" alt="AWS DynamoDB" height="auto" /><br/>AWS DynamoDB</td>
+    <td align=center valign=bottom><img src="https://cdn.worldvectorlogo.com/logos/aws-cloudformation.svg" alt="AWS Cloud Formation" height="auto" /><br/>AWS Cloud Formation</td>    
   </tr>
 </table>
 
