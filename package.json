@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.504.0",
+    "@aws-sdk/client-sqs": "^3.536.0",
     "@aws-sdk/lib-dynamodb": "^3.504.0",
     "joi": "^17.12.1"
   }
