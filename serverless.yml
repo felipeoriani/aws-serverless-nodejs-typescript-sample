@@ -43,6 +43,8 @@ provider:
         - !GetAtt CheckInPassengerQueue.Arn
   environment:
     TABLE_NAME: ${self:custom.tableName}
+    CHECK_IN_FLIGHT_SQS_QUEUE_URL: !GetAtt CheckInFlightQueue.QueueUrl
+    CHECK_IN_PASSENGER_SQS_QUEUE_URL: !GetAtt CheckInPassengerQueue.QueueUrl
 
 plugins:
   - serverless-plugin-typescript
