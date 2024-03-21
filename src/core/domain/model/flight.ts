@@ -3,13 +3,23 @@ import { GetPagedResult, IBaseRepository } from '../repository/base-repository.j
 import { BaseEntity } from './base.js'
 import joi from 'joi'
 
-/** FLight entity that represents a flight containing all the info */
+/** Flight entity that represents a flight containing all the info */
 export type Flight = BaseEntity & {
   code: string
   from: string
   to: string
   date: Date
   airline: string
+  state: FlightState
+}
+
+export enum FlightState {
+  Awaiting,
+  CheckIn,
+  Delayed,
+  Running,
+  Complete,
+  Cancelled,
 }
 
 export interface IFlightRepository extends IBaseRepository<Flight> {
@@ -21,6 +31,8 @@ export interface IFlightRepository extends IBaseRepository<Flight> {
     count?: number,
     nextToken?: string
   ): Promise<GetPagedResult<Flight>>
+
+  getFlightsToCheckIn(date: Date): Promise<Flight[]>
 }
 
 export interface IFlightService {
