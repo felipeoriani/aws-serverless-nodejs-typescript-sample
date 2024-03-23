@@ -38,3 +38,15 @@ export function formatDate(date: Date): string {
   const formattedDate = `${day}-${monthsAbbr[monthIndex]}-${year}`
   return formattedDate
 }
+
+/**
+ * Returns is a string is a date
+ * @param dateToTest
+ * @returns
+ */
+export function isDate(dateToTest: string): boolean {
+  if (!dateToTest) return false
+  if (!dateToTest.trim()) return false
+  if (!/\d+-\d+-\d+/.test(dateToTest)) return false
+  return !isNaN(Date.parse(dateToTest))
+}
