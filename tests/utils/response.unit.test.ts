@@ -1,12 +1,20 @@
 import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
 
-import { badRequest, created, ok, unprocessableEntity as unprocessableContent } from '../../src/utils/response.js'
+import {
+  ProblemDetails,
+  badRequest,
+  created,
+  notFound,
+  ok,
+  unprocessableEntity as unprocessableContent,
+} from '../../src/utils/response.js'
 import { randomUUID } from 'node:crypto'
 
 describe('response must be in the API Gateway format', () => {
   const contentType = 'Content-Type'
   const applicationJson = 'application/json'
+  const applicationProblemJson = 'application/problem+json'
 
   it('Should prepare the response instance to 200 - Ok', () => {
     // arrange
@@ -17,10 +25,10 @@ describe('response must be in the API Gateway format', () => {
 
     // assert
     assert.ok(result, 'The instance of the response is not valid.')
-    assert.strictEqual(result.statusCode, 200)
+    assert.equal(result.statusCode, 200)
     assert.ok(result.headers)
-    assert.strictEqual(result.headers[contentType], applicationJson)
-    assert.strictEqual(result.body, JSON.stringify(data))
+    assert.equal(result.headers[contentType], applicationJson)
+    assert.equal(result.body, JSON.stringify(data))
   })
 
   it('Should prepare the response instance to 201 - Created', () => {
@@ -33,11 +41,11 @@ describe('response must be in the API Gateway format', () => {
 
     // assert
     assert.ok(result, 'The instance of the response is not valid.')
-    assert.strictEqual(result.statusCode, 201)
+    assert.equal(result.statusCode, 201)
     assert.ok(result.headers)
-    assert.strictEqual(result.headers.Location, location)
-    assert.strictEqual(result.headers[contentType], applicationJson)
-    assert.strictEqual(result.body, JSON.stringify(data))
+    assert.equal(result.headers.Location, location)
+    assert.equal(result.headers[contentType], applicationJson)
+    assert.equal(result.body, JSON.stringify(data))
   })
 
   it('Should prepare the response instance to 400 - Bad Request', () => {
@@ -46,13 +54,32 @@ describe('response must be in the API Gateway format', () => {
 
     // act
     const result = badRequest(data)
+    const problemDetails = JSON.parse(result.body) as ProblemDetails
 
     // assert
     assert.ok(result, 'The instance of the response is not valid.')
-    assert.strictEqual(result.statusCode, 400)
+    assert.equal(result.statusCode, 400)
     assert.ok(result.headers)
-    assert.strictEqual(result.headers[contentType], applicationJson)
-    assert.strictEqual(result.body, JSON.stringify(data))
+    assert.equal(result.headers[contentType], applicationProblemJson)
+    assert.equal(problemDetails.status, 400)
+    assert.deepEqual(problemDetails.detail, data, 'The problem details does not hold the error.')
+  })
+
+  it('Should prepare the response instance to 404 - Not Found', () => {
+    // arrange
+    const data = undefined
+
+    // act
+    const result = notFound(data)
+    const problemDetails = JSON.parse(result.body) as ProblemDetails
+
+    // assert
+    assert.ok(result, 'The instance of the response is not valid.')
+    assert.strictEqual(result.statusCode, 404)
+    assert.ok(result.headers)
+    assert.strictEqual(result.headers[contentType], applicationProblemJson)
+    assert.equal(problemDetails.status, 404)
+    assert.deepEqual(problemDetails.detail, undefined, 'The problem details does not hold the error.')
   })
 
   it('Should prepare the response instance to 422 - Unprocessable Content', () => {
@@ -61,12 +88,14 @@ describe('response must be in the API Gateway format', () => {
 
     // act
     const result = unprocessableContent(data)
+    const problemDetails = JSON.parse(result.body) as ProblemDetails
 
     // assert
     assert.ok(result, 'The instance of the response is not valid.')
     assert.strictEqual(result.statusCode, 422)
     assert.ok(result.headers)
-    assert.strictEqual(result.headers[contentType], applicationJson)
-    assert.strictEqual(result.body, JSON.stringify(data))
+    assert.strictEqual(result.headers[contentType], applicationProblemJson)
+    assert.equal(problemDetails.status, 422)
+    assert.deepEqual(problemDetails.detail, data, 'The problem details does not hold the error.')
   })
 })
