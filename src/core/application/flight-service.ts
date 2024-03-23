@@ -1,5 +1,5 @@
-import { ValidateableResponse } from 'src/utils/validateable-response.js'
-import { Flight, IFlightRepository, IFlightService, flightValidator } from '../domain/model/flight.js'
+import { ValidateableResponse } from '../../utils/validateable-response.js'
+import { Flight, FlightState, IFlightRepository, IFlightService, flightValidator } from '../domain/model/flight.js'
 import { GetPagedResult } from '../domain/repository/base-repository.js'
 import { MessageQueue } from '../domain/utils/message-queue.js'
 import { FlightRepository } from '../infrastructure/repositories/flight-repository.js'
@@ -49,11 +49,18 @@ export class FlightService implements IFlightService {
   }
 
   public async create(input: Flight): Promise<ValidateableResponse<Flight>> {
+    // All the new flights must be on the Awaiting state
+    input.state = FlightState.Awaiting
+
+    // validate the flight object
     const validation = flightValidator.validate(input)
+
     if (validation.error) {
       const errors = validation.error.details.map((x) => x.message)
       return { errors }
     }
+
+    // create the flight on the database
     const model = await this.flightRepository.create(input)
     return { model }
   }
