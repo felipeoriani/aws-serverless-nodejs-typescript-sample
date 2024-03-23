@@ -10,4 +10,8 @@ export type DynamoModel = BaseEntity & {
   gsi1pk?: string
   /** Sort Key for Global Secondary Index 1 */
   gsi1sk?: string
+  /** Partition Key for Global Secondary Index 2. */
+  gsi2pk?: string
+  /** Sort Key for Global Secondary Index 2 */
+  gsi2sk?: string
 }
