@@ -1,4 +1,4 @@
-import { ValidateableResponse } from 'src/utils/validateable-response.js'
+import { ValidateableResponse } from '../../../utils/validateable-response.js'
 import { GetPagedResult, IBaseRepository } from '../repository/base-repository.js'
 import { BaseEntity } from './base.js'
 import joi from 'joi'
@@ -14,12 +14,12 @@ export type Flight = BaseEntity & {
 }
 
 export enum FlightState {
-  Awaiting,
-  CheckIn,
-  Delayed,
-  Running,
-  Complete,
-  Cancelled,
+  Awaiting = 'Awaiting',
+  CheckIn = 'CheckIn',
+  Delayed = 'Delayed',
+  Running = 'Running',
+  Complete = 'Complete',
+  Cancelled = 'Cancelled',
 }
 
 export interface IFlightRepository extends IBaseRepository<Flight> {
@@ -56,4 +56,5 @@ export const flightValidator = joi.object<Flight>().keys({
   to: joi.string().required().min(3).max(100),
   date: joi.date().required(),
   airline: joi.string().required().max(50),
+  state: joi.required(),
 })
