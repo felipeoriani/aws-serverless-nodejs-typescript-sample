@@ -2,9 +2,9 @@ import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb'
 import { ddb } from '../dynamo.js'
 import { BaseDynamoRepository } from './base-dynamodb-repository.js'
 import { fromISOToDate } from '../../../utils/date.js'
-import { IPassengerRepository, Passenger } from 'src/core/domain/model/passenger.js'
-import { GetPagedResult } from 'src/core/domain/repository/base-repository.js'
-import { Flight } from 'src/core/domain/model/flight.js'
+import { IPassengerRepository, Passenger } from '../../../core/domain/model/passenger.js'
+import { GetPagedResult } from '../../../core/domain/repository/base-repository.js'
+import { Flight } from '../../../core/domain/model/flight.js'
 
 /**
  * Implementation for IPassengerRepository using DynamoDB as the data source.

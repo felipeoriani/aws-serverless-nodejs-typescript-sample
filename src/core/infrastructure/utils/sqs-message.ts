@@ -1,7 +1,7 @@
 import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs'
-import { CheckInFlightMessage, CheckInPassengerMessage } from 'src/core/domain/messages/index.js'
-import { ConfigInfrastructure, EnvironmentVariable } from 'src/core/domain/utils/config-infrastructure.js'
-import { MessageQueue } from 'src/core/domain/utils/message-queue.js'
+import { CheckInFlightMessage, CheckInPassengerMessage } from '../../../core/domain/messages/index.js'
+import { ConfigInfrastructure, EnvironmentVariable } from '../../../core/domain/utils/config-infrastructure.js'
+import { MessageQueue } from '../../../core/domain/utils/message-queue.js'
 import { Config } from './config.js'
 
 export class SqsMessage implements MessageQueue {

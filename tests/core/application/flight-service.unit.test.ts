@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict'
-import { describe, it, beforeEach, mock } from 'node:test'
+import { describe, it, beforeEach } from 'node:test'
 
 import { Flight, IFlightRepository, IFlightService } from '../../../src/core/domain/model/flight.js'
 import { FlightService } from '../../../src/core/application/flight-service.js'

@@ -16,9 +16,9 @@ import {
 } from '@aws-sdk/lib-dynamodb'
 import { randomUUID } from 'crypto'
 
-import { GetPagedResult, IBaseRepository, UpdateModel } from 'src/core/domain/repository/base-repository.js'
+import { GetPagedResult, IBaseRepository, UpdateModel } from '../../../core/domain/repository/base-repository.js'
 import { DynamoModel } from './dynamo-model.js'
-import { BaseEntity } from 'src/core/domain/model/base.js'
+import { BaseEntity } from '../../../core/domain/model/base.js'
 
 const dynamoDbWriteBatchSize = 25
 const dynamoDbGetBatchSize = 100
@@ -423,7 +423,7 @@ export abstract class BaseDynamoRepository<T extends BaseEntity> implements IBas
   protected handleEntity(record: Record<string, unknown>): T {
     const model = record as unknown as DynamoModel
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { pk, gsi1pk, gsi1sk, ...rest } = model
+    const { pk, gsi1pk, gsi1sk, gsi2pk, gsi2sk, ...rest } = model
     return this.mapEntity(rest)
   }
 

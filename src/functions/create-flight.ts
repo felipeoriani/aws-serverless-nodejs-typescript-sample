@@ -12,9 +12,8 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
 
   const flight = formatBody<Flight>(event.body)
 
-  console.log(`Flight: ${JSON.stringify(flight)}`)
-
   const flightService = new FlightService()
+
   const result = await flightService.create(flight)
 
   if (result.errors) {

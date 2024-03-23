@@ -1,4 +1,4 @@
-import { ValidateableResponse } from 'src/utils/validateable-response.js'
+import { ValidateableResponse } from '../../../utils/validateable-response.js'
 import { GetPagedResult, IBaseRepository } from '../repository/base-repository.js'
 import { BaseEntity } from './base.js'
 import joi from 'joi'
