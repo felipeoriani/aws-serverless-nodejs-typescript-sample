@@ -3,7 +3,7 @@ import { ddb } from '../dynamo.js'
 import { BaseDynamoRepository } from './base-dynamodb-repository.js'
 import { IFlightRepository, Flight, FlightState } from '../../domain/model/flight.js'
 import { fromISOToDate } from '../../../utils/date.js'
-import { GetPagedResult } from 'src/core/domain/repository/base-repository.js'
+import { GetPagedResult } from '../../../core/domain/repository/base-repository.js'
 
 const tableName = process.env.TABLE_NAME as string
 
@@ -32,8 +32,8 @@ export class FlightRepository extends BaseDynamoRepository<Flight> implements IF
     model.date = date
     model.gsi1pk = `${entity.from}#${entity.to}`
     model.gsi1sk = date
-    model.gsi2sk = `flight#${entity.state}`
-    model.gsi2pk = date
+    model.gsi2pk = `flight#${entity.state}`
+    model.gsi2sk = date
     return entity as Flight
   }
 
