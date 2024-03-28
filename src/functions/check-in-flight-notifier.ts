@@ -1,8 +1,17 @@
-export const handler = async (event: unknown) => {
-  // get the message { flightId }
-  // get all the passengers of the flight
-  // for each passenger, push a message into the sqs { flightId, passengerId }
-  // update the flight status
+import { SQSEvent } from 'aws-lambda'
+import { CheckInFlightMessage } from '../core/domain/messages/index.js'
+import { NotificationService } from 'src/core/application/notification-service.js'
 
-  console.log(`Check-in Flight Notifier event: ${JSON.stringify(event)}`)
+export const handler = async (event: SQSEvent) => {
+  console.log(`Check-in Flight event: ${JSON.stringify(event)}`)
+
+  const message = JSON.parse(event.Records[0].body) as CheckInFlightMessage
+
+  const notificationService = new NotificationService()
+
+  const result = await notificationService.checkInFlight(message.flightId)
+
+  console.log(
+    `A total of ${result} message(s) where sent to start check-in process of the passengers of the flight id: ${message.flightId}.`
+  )
 }

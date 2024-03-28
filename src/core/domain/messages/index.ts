@@ -3,6 +3,6 @@ export type CheckInFlightMessage = {
 }
 
 export type CheckInPassengerMessage = {
-  flight: string
+  flightId: string
   passengerId: string
 }

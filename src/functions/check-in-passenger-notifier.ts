@@ -1,6 +1,17 @@
-export const handler = async (event: unknown) => {
-  // get the message { flightId, passengerId }
-  // get the flight and passenger data
-  // send an email to sat that the checkin is open
-  console.log(`Check-in Passenger Notifier event: ${JSON.stringify(event)}`)
+import { SQSEvent } from 'aws-lambda'
+import { CheckInPassengerMessage } from '../core/domain/messages/index.js'
+import { NotificationService } from 'src/core/application/notification-service.js'
+
+export const handler = async (event: SQSEvent) => {
+  console.log(`Check-in  Passenger event: ${JSON.stringify(event)}`)
+
+  const message = JSON.parse(event.Records[0].body) as CheckInPassengerMessage
+
+  const notificationService = new NotificationService()
+
+  const result = await notificationService.checkInPassenger(message.flightId, message.passengerId)
+
+  if (result) {
+    console.log(`The passenger ${message.passengerId} was notified for the flight ${message.flightId}.`)
+  }
 }

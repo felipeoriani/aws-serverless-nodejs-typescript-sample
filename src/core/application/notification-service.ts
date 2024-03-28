@@ -44,11 +44,13 @@ export class NotificationService {
     return 0
   }
 
-  async checkInPassenger(flightId: string, passengerId: string): Promise<number> {
+  async checkInPassenger(flightId: string, passengerId: string): Promise<boolean> {
     // get the passenger seat to notify of the check-in process
+
+    console.log(`Flight: ${flightId}, Passenger: ${passengerId}`)
 
     // send email using AWS SES with check-in details
 
-    return 0
+    return true
   }
 }
