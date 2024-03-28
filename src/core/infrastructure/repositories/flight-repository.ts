@@ -28,12 +28,12 @@ export class FlightRepository extends BaseDynamoRepository<Flight> implements IF
 
   protected override handleModel(entity: Flight): Flight {
     const model = entity as Record<string, unknown>
-    const date = entity.date.toISOString()
-    model.date = date
+    const isoDate = entity.date.toISOString()
+    model.date = isoDate
     model.gsi1pk = `${entity.from}#${entity.to}`
-    model.gsi1sk = date
+    model.gsi1sk = isoDate
     model.gsi2pk = `flight#${entity.state}`
-    model.gsi2sk = date
+    model.gsi2sk = `${isoDate}#${entity.id}`
     return entity as Flight
   }
 
@@ -77,6 +77,11 @@ export class FlightRepository extends BaseDynamoRepository<Flight> implements IF
     }
   }
 
+  /**
+   * This method is a Outbox implementation for flight.
+   * @param date Start date
+   * @returns
+   */
   public async getFlightsToCheckIn(date: Date): Promise<Flight[]> {
     const dateToSearch = new Date(date.getTime() + 48 * 60 * 60 * 1000)
 

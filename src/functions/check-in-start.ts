@@ -6,7 +6,7 @@ export const handler = async (event: unknown) => {
   const currentDate = new Date()
   const notificationService = new NotificationService()
 
-  const result = await notificationService.notify(currentDate)
+  const result = await notificationService.startCheckIn(currentDate)
 
   console.log(`A total of ${result} message(s) where sent to start check-in process on the flight.`)
 }

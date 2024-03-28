@@ -1,4 +1,4 @@
-import { IFlightRepository } from '../domain/model/flight.js'
+import { FlightState, IFlightRepository } from '../domain/model/flight.js'
 import { MessageQueue } from '../domain/utils/message-queue.js'
 import { FlightRepository } from '../infrastructure/repositories/flight-repository.js'
 import { SqsMessage } from '../infrastructure/utils/sqs-message.js'
@@ -9,7 +9,7 @@ export class NotificationService {
     private readonly messageQueue: MessageQueue = new SqsMessage()
   ) {}
 
-  async notify(startDate: Date): Promise<number> {
+  async startCheckIn(startDate: Date): Promise<number> {
     // get all the flights ready to be checkin
     const flights = await this.flightRepository.getFlightsToCheckIn(startDate)
 
@@ -21,5 +21,34 @@ export class NotificationService {
 
     // return the number of requests that succeed
     return results.filter((x) => x).length
+  }
+
+  async checkInFlight(flightId: string): Promise<number> {
+    // get all the passengers of the flight
+
+    const flight = await this.flightRepository.get(flightId)
+
+    if (!flight) {
+      console.log(`The flight with id ${flightId} is not available.`)
+      return 0
+    }
+
+    // TODO: get all the passengers of the flightId
+    // TODO: for each passenger, push a message into the sqs { flightId, passengerId }
+
+    // update the flight status
+    flight.state = FlightState.CheckIn
+    await this.flightRepository.update(flightId, flight)
+
+    // return the number of succeed messages
+    return 0
+  }
+
+  async checkInPassenger(flightId: string, passengerId: string): Promise<number> {
+    // get the passenger seat to notify of the check-in process
+
+    // send email using AWS SES with check-in details
+
+    return 0
   }
 }
