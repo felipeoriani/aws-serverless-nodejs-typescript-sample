@@ -1,6 +1,8 @@
 # AWS Serverless Node.Js Typescript Sample Project
 
-This is an example of a project for a Flight Air company built using part of the technology stack that I use throughout my career where the main objective is to compose my portfolio and demonstrate a bit of my professional experience. Focused on a `Cloud Native` Rest API, the project leverages `AWS` Services with a strong emphasis on `Serverless` Architecture. To achieve this, the foundation is built upon the `Serverless Framework` with custom `AWS Cloud Formation` sections to complete provide infrastructure as code. Feel free to contact and check other projects in my portfolio here at [Github profile](https://github.com/felipeoriani) page.
+Hello, welcome. I am Felipe!
+
+This is an example of a project for a Flight Air company designed and built using part of the technology stack that I use throughout my career where the goal is to compose my portfolio and demonstrate a bit of my professional experience. Focused on a `Cloud Native` Rest API, this project leverages `AWS` Services with a strong emphasis on `Serverless` Architecture. To achieve this, the foundation is built upon the `Serverless Framework` with custom `AWS Cloud Formation` sections to complete provide infrastructure as code. Feel free to contact me and check other projects in my portfolio here at [Github profile](https://github.com/felipeoriani) page.
 
 ### Stack
 
